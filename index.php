@@ -73,7 +73,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #f2c12e; /* Replace with your desired color */
+  background-color:rgb(24, 237, 223); /* Replace with your desired color */
   z-index: -1;
 }
 
@@ -88,8 +88,8 @@
 
 /* Keyframes for the animation */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
 }
      h1{
     	text-align: center;

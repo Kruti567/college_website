@@ -1,31 +1,39 @@
 <?php
-  if (isset($_POST["submit"])) {
-    $username = $_POST["name"];
-    $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $message = $_POST["message"];
+if (isset($_POST["submit"])) {
+  $username = $_POST["name"];
+  $email = $_POST["email"];
+  $phone = $_POST["phone"];
+  $userMessage = $_POST["message"];
 
-    $to = $email;
-    $subject = $message;
+  $to = "nirmiti@nirmitidegreecollege.in";
+  $subject = "New contact form submission from $username";
 
-    $message = "Name: {$username} Email: {$email} Phone: {$phone}  Message: " . $message;
+  $message = "
+    <html>
+    <body>
+      <h2>Contact Form Message</h2>
+      <p><strong>Name:</strong> {$username}</p>
+      <p><strong>Email:</strong> {$email}</p>
+      <p><strong>Phone:</strong> {$phone}</p>
+      <p><strong>Message:</strong> {$userMessage}</p>
+    </body>
+    </html>
+  ";
 
-    // Always set content-type when sending HTML email
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $headers = "MIME-Version: 1.0" . "\r\n";
+  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $headers .= "From: VCST Contact <contact@vcstcollege.org>" . "\r\n";
 
-    // More headers
-    $headers .= 'From: contact@vcstcollege.org';
+  $mail = mail($to, $subject, $message, $headers);
 
-    $mail = mail($to,$subject,$message,$headers);
-
-    if ($mail) {
-      echo "<script>alert('Mail Send.');</script>";
-    }else {
-      echo "<script>alert('Mail Not Send.');</script>";
-    }
+  if ($mail) {
+    echo "<script>alert('Mail Sent.');</script>";
+  } else {
+    echo "<script>alert('Mail Not Sent.');</script>";
   }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
