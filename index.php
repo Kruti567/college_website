@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nirmiti College | HOME</title>
-    <link rel="shortcut icon" type="images" href="images/logo.jpg">
+    <link rel="shortcut icon" type="images" href="images/logonimriti.PNG">
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -183,7 +183,7 @@
     <!-- header section ends -->
     <BR>
     <div class="slider-container">
-        <img src="images/c-Banner.png" alt="Slide 1">
+        <img src="images/c-Banner2.png" alt="Slide 1">
        
 
         <div class="slider-nav">

@@ -2,7 +2,7 @@
 
         <a href="index.php" class="logo"> 
             <!--<i class="fas fa-user-graduate"></i>-->  
-            <img class="logo-img" src="images/logo.png" width="55" height="55" ALT="Nirmiti" ALIGN=CENTER>Nirmiti College
+            <img class="logo-img" src="images/logonimriti.PNG" width="55" height="55" ALT="Nirmiti" ALIGN=CENTER>Nirmiti College
         </a>
 
         <div id="menu-btn" class="fas fa-bars"></div>
