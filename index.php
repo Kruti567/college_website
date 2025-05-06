@@ -182,16 +182,7 @@
     <?php include "common/header.php";?>
     <!-- header section ends -->
     <BR>
-    <div class="slider-container">
-        <img src="images/c-Banner2.png" alt="Slide 1">
-       
-
-        <div class="slider-nav">
-            <button class="active"></button>
-            <button></button>
-            <button></button>
-        </div>
-    </div>
+    
     <script>
         // Slider functionality (JavaScript)
         let sliderIndex = 0;
@@ -260,7 +251,7 @@
     <!-- home section starts  -->
     <section class="home">
         <div class="image">
-            <img src="images/home-img.png" alt="">
+            <img src="images/home-img.png" alt="" style="box-shadow: 0 4px 8px rgba(0,0,0,0.3); border-radius: 50%; object-fit: cover;" >
         </div>
         <div class="content">
             <H1>RP Gems Group of Colleges</H1>
