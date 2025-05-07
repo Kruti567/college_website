@@ -140,14 +140,13 @@
       color: #666;
     }
     
-    
-    
     @media (max-width: 600px) {
       .feature {
         width: 100%;
         margin: 10px 0;
       }
     }
+    
     </style>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-609Q4WBY37">

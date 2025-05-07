@@ -33,7 +33,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> Nirmiti College | Contact Us</title>
-    <link rel="shortcut icon" type="images" href="images/logo.jpg">
+    <link rel="shortcut icon" type="images" href="images/logonimriti.PNG">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/contact.css" />
     <script
