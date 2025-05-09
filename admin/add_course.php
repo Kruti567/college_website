@@ -1,0 +1,182 @@
+<?php
+// Start the session
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    // Redirect to login page if not logged in
+    header("Location: login.php");
+    exit;
+}
+
+// Initialize variables for course form
+$title = $desc = $duration = "";
+$titleErr = $descErr = $durationErr = "";
+$fileErr = "";
+$formSubmitted = false;
+$success = false;
+$successMessage = "";
+$errorMessage = "";
+
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
+    $formSubmitted = true;
+    
+    // Validate title
+    if (empty($_POST["title"])) {
+        $titleErr = "Course title is required";
+    } else {
+        $title = $_POST["title"];
+    }
+    
+    // Validate description
+    if (empty($_POST["description"])) {
+        $descErr = "Course description is required";
+    } else {
+        $desc = $_POST["description"];
+    }
+    
+    // Validate duration
+    if (empty($_POST["duration"])) {
+        $durationErr = "Course duration is required";
+    } else {
+        $duration = $_POST["duration"];
+        if (!is_numeric($duration) || $duration <= 0) {
+            $durationErr = "Duration must be a positive number";
+        }
+    }
+    
+    // Process syllabus file if uploaded
+    $syllabusPath = null;
+    if (isset($_FILES["syllabus_file"]) && $_FILES["syllabus_file"]["error"] == 0) {
+        // Get file details
+        $file = $_FILES["syllabus_file"];
+        $fileName = $file["name"];
+        $fileTmpName = $file["tmp_name"];
+        $fileSize = $file["size"];
+        $fileError = $file["error"];
+        
+        // Get file extension
+        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        
+        // Check if file is a PDF
+        if ($fileExt !== "pdf") {
+            $fileErr = "Only PDF files are allowed";
+        } 
+        else {
+            // Create directory if it doesn't exist
+            $uploadDir = "../syllabus/";
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            
+            // Generate unique filename
+            $newFileName = "syllabus_" . time() . "_" . rand(1000, 9999) . "." . $fileExt;
+            $uploadPath = $uploadDir . $newFileName;
+            
+            // Upload file
+            if (move_uploaded_file($fileTmpName, $uploadPath)) {
+                $syllabusPath = $uploadPath;
+            } else {
+                $fileErr = "There was an error uploading the file";
+            }
+        }
+    }
+    
+    // If no errors, add the course
+    if (empty($titleErr) && empty($descErr) && empty($durationErr) && empty($fileErr)) {
+        $success = addCourse($title, $desc, $duration, $syllabusPath);
+    }
+}
+
+// Placeholder function to add a course
+function addCourse($title, $desc, $duration, $syllabusPath = null) {
+    $successMessage = "<div class='success-message'>";
+    $successMessage .= "<h3>Course Added (Placeholder)</h3>";
+    $successMessage .= "<p><strong>Title:</strong> " . htmlspecialchars($title) . "</p>";
+    $successMessage .= "<p><strong>Description:</strong> " . htmlspecialchars($desc) . "</p>";
+    $successMessage .= "<p><strong>Duration:</strong> " . htmlspecialchars($duration) . " months</p>";
+    
+    if ($syllabusPath) {
+        $successMessage .= "<p><strong>Syllabus:</strong> Uploaded successfully</p>";
+        $successMessage .= "<p><strong>File Path:</strong> " . htmlspecialchars($syllabusPath) . "</p>";
+    } else {
+        $successMessage .= "<p><strong>Syllabus:</strong> Not uploaded</p>";
+    }
+    
+    $successMessage .= "</div>";
+    
+    echo $successMessage;
+    
+    // In a real application, this would save to a database
+    // return true/false based on success
+    return true;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin-style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="add_course.php">Course Management</a></li>
+                <li><a href="upload_activity.php">Upload Activities</a></li>
+                <li><a href="login.php">Logout</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">Course Management</div>
+                <div class="back-link"><a href="dashboard.php">← Back to Dashboard</a></div>
+            </div>
+            
+            <div class="form-container">
+                <h3>Add New Course</h3>
+                
+                <?php if($errorMessage): ?>
+                    <div class="error-message"><?php echo $errorMessage; ?></div>
+                <?php endif; ?>
+                
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="title">Course Title:</label>
+                        <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($title); ?>">
+                        <span class="error"><?php echo $titleErr; ?></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Course Description:</label>
+                        <textarea id="description" name="description"><?php echo htmlspecialchars($desc); ?></textarea>
+                        <span class="error"><?php echo $descErr; ?></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="duration">Duration (months):</label>
+                        <input type="number" id="duration" name="duration" min="1" value="<?php echo htmlspecialchars($duration); ?>">
+                        <span class="error"><?php echo $durationErr; ?></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="syllabus_file">Course Syllabus (PDF):</label>
+                        <input type="file" id="syllabus_file" name="syllabus_file" accept=".pdf">
+                        <span class="error"><?php echo $fileErr; ?></span>
+                        <small>Optional</small>
+                    </div>
+                    
+                    <button type="submit" name="add_course">Add Course</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
