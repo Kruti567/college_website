@@ -90,27 +90,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
 }
 
 // Placeholder function to add a course
+// Real function to add a course
 function addCourse($title, $desc, $duration, $syllabusPath = null) {
-    $successMessage = "<div class='success-message'>";
-    $successMessage .= "<h3>Course Added (Placeholder)</h3>";
-    $successMessage .= "<p><strong>Title:</strong> " . htmlspecialchars($title) . "</p>";
-    $successMessage .= "<p><strong>Description:</strong> " . htmlspecialchars($desc) . "</p>";
-    $successMessage .= "<p><strong>Duration:</strong> " . htmlspecialchars($duration) . " months</p>";
+    require 'db_conn.php';  // Include DB connection
     
-    if ($syllabusPath) {
-        $successMessage .= "<p><strong>Syllabus:</strong> Uploaded successfully</p>";
-        $successMessage .= "<p><strong>File Path:</strong> " . htmlspecialchars($syllabusPath) . "</p>";
+    $sql = "INSERT INTO courses (title, description, duration, syllabus_path) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("ssis", $title, $desc, $duration, $syllabusPath);
+
+        if ($stmt->execute()) {
+            echo "<div class='success-message'>Course Added Successfully!</div>";
+            return true;
+        } else {
+            echo "<div class='error-message'>Failed to execute: " . $stmt->error . "</div>";
+            return false;
+        }
     } else {
-        $successMessage .= "<p><strong>Syllabus:</strong> Not uploaded</p>";
+        echo "<div class='error-message'>Prepare failed: " . $conn->error . "</div>";
+        return false;
     }
-    
-    $successMessage .= "</div>";
-    
-    echo $successMessage;
-    
-    // In a real application, this would save to a database
-    // return true/false based on success
-    return true;
 }
 ?>
 
