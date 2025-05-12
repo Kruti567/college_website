@@ -48,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
     
     // Process syllabus file if uploaded
     $syllabusPath = null;
+    $relativePath = null;
     if (isset($_FILES["syllabus_file"]) && $_FILES["syllabus_file"]["error"] == 0) {
         // Get file details
         $file = $_FILES["syllabus_file"];
@@ -73,10 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
             // Generate unique filename
             $newFileName = "syllabus_" . time() . "_" . rand(1000, 9999) . "." . $fileExt;
             $uploadPath = $uploadDir . $newFileName;
+            $relativePath = "syllabus/" . $newFileName; // Store relative path for database
             
             // Upload file
             if (move_uploaded_file($fileTmpName, $uploadPath)) {
-                $syllabusPath = $uploadPath;
+                $syllabusPath = $relativePath; // Store relative path instead of full path
             } else {
                 $fileErr = "There was an error uploading the file";
             }
@@ -86,10 +88,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
     // If no errors, add the course
     if (empty($titleErr) && empty($descErr) && empty($durationErr) && empty($fileErr)) {
         $success = addCourse($title, $desc, $duration, $syllabusPath);
+        if ($success) {
+            // Reset form after successful submission
+            $title = $desc = $duration = "";
+        }
     }
 }
 
-// Placeholder function to add a course
 // Real function to add a course
 function addCourse($title, $desc, $duration, $syllabusPath = null) {
     require 'db_conn.php';  // Include DB connection
@@ -130,7 +135,7 @@ function addCourse($title, $desc, $duration, $syllabusPath = null) {
                 <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="add_course.php">Course Management</a></li>
                 <li><a href="upload_activity.php">Upload Activities</a></li>
-                <li><a href="login.php">Logout</a></li>
+                <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
         

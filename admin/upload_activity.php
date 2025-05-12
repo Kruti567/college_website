@@ -9,6 +9,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
+// Include database connection
+require_once 'db_conn.php';
+
 // Initialize variables
 $caption = "";
 $captionErr = "";
@@ -73,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Generate unique filename
             $newFileName = "activity_" . time() . "_" . $i . "." . $fileExt;
             $uploadPath = $uploadDir . $newFileName;
+            $relativePath = "activities/" . $newFileName;
             
             // Upload file
             if (move_uploaded_file($fileTmpName, $uploadPath)) {
@@ -80,8 +84,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $uploadedFiles[] = [
                     'name' => $newFileName,
                     'original_name' => $fileName,
-                    'path' => $uploadPath
+                    'path' => $uploadPath,
+                    'relative_path' => $relativePath
                 ];
+                
+                // Insert into database
+                $sql = "INSERT INTO activities (caption, image_path, upload_date) VALUES (?, ?, NOW())";
+                $stmt = $conn->prepare($sql);
+                if ($stmt) {
+                    $stmt->bind_param("ss", $caption, $relativePath);
+                    $stmt->execute();
+                    $stmt->close();
+                } else {
+                    $errorMessage .= "Database error: " . $conn->error . "<br>";
+                }
             } else {
                 $errorMessage .= "Failed to upload: " . $fileName . "<br>";
             }
@@ -246,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="add_course.php">Course Management</a></li>
                 <li><a href="upload_activity.php">Upload Activities</a></li>
-                <li><a href="login.php">Logout</a></li>
+                <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
         
@@ -288,11 +304,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                         <?php foreach($uploadedFiles as $file): ?>
                             <div class="file-item">
-                                <img src="<?php echo $file['path']; ?>" alt="Activity Image">
+                                <img src="../<?php echo $file['relative_path']; ?>" alt="Activity Image">
                                 <div class="file-info">
                                     <p><strong>Filename:</strong> <?php echo htmlspecialchars($file['name']); ?></p>
                                     <p><strong>Original Name:</strong> <?php echo htmlspecialchars($file['original_name']); ?></p>
-                                    <p><strong>Path:</strong> <?php echo htmlspecialchars($file['path']); ?></p>
+                                    <p><strong>Path:</strong> <?php echo htmlspecialchars($file['relative_path']); ?></p>
                                 </div>
                             </div>
                         <?php endforeach; ?>
