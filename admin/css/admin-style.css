@@ -143,3 +143,19 @@ button:hover {
 .tab-content.active {
     display: block;
 }
+.course-description {
+    margin: 10px 0;
+    line-height: 1.5;
+    overflow: auto;
+    max-height: 150px; /* Adjust as needed */
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.box .btn {
+    margin-top: auto;
+}

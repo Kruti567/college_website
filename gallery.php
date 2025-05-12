@@ -146,7 +146,7 @@
         require_once "admin/db_conn.php";
         
         // Fetch activities from database, grouped by caption
-        $sql = "SELECT caption, upload_date, GROUP_CONCAT(image_path) as images 
+        $sql = "SELECT caption, upload_date, GROUP_CONCAT(image_path ORDER BY id DESC) as images 
                 FROM activities 
                 GROUP BY caption, upload_date 
                 ORDER BY upload_date DESC";

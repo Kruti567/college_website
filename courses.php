@@ -46,8 +46,8 @@
                 echo '<div class="box">';
                 echo '<img src="images/1.png" alt="">'; // Default image
                 echo '<h3>' . htmlspecialchars($row['title']) . '</h3>';
-                echo '<p>' . htmlspecialchars(substr($row['description'], 0, 100)) . '...</p>';
-                echo '<p>Duration: ' . htmlspecialchars($row['duration']) . ' months</p>';
+                echo '<div class="course-description">' . nl2br(htmlspecialchars($row['description'])) . '</div>';
+                echo '<p>Duration: ' . htmlspecialchars($row['duration']) . '</p>';
                 
                 // Check if syllabus PDF exists
                 if (!empty($row['syllabus_path'])) {

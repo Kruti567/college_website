@@ -116,7 +116,7 @@ if ($course_id > 0) {
         <h2><?php echo htmlspecialchars($course['title']); ?></h2>
         
         <div class="info">
-            <p><strong>Duration:</strong> <?php echo htmlspecialchars($course['duration']); ?> months</p>
+            <p><strong>Duration:</strong> <?php echo htmlspecialchars($course['duration']); ?></p>
             <p><strong>Description:</strong></p>
             <p><?php echo nl2br(htmlspecialchars($course['description'])); ?></p>
         </div>

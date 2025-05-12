@@ -41,9 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
         $durationErr = "Course duration is required";
     } else {
         $duration = $_POST["duration"];
-        if (!is_numeric($duration) || $duration <= 0) {
-            $durationErr = "Duration must be a positive number";
-        }
     }
     
     // Process syllabus file if uploaded
@@ -166,8 +163,8 @@ function addCourse($title, $desc, $duration, $syllabusPath = null) {
                     </div>
                     
                     <div class="form-group">
-                        <label for="duration">Duration (months):</label>
-                        <input type="number" id="duration" name="duration" min="1" value="<?php echo htmlspecialchars($duration); ?>">
+                        <label for="duration">Duration:</label>
+                        <input type="text" id="duration" name="duration" value="<?php echo htmlspecialchars($duration); ?>">
                         <span class="error"><?php echo $durationErr; ?></span>
                     </div>
                     
