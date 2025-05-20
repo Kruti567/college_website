@@ -260,7 +260,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h2>Admin Panel</h2>
             <ul>
                 <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="add_course.php">Course Management</a></li>
+                <li><a href="add_course.php">Add Course </a></li>
+                <li><a href="manage_courses.php">Manage Courses</a></li>
                 <li><a href="upload_activity.php">Upload Activities</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
